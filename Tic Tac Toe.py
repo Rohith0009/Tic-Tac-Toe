@@ -13,6 +13,20 @@ root.geometry("%dx%d" % (width, height))
 root.title("Tic Tac Toe")
 root.iconbitmap("logo.ico")
 
+# Resolution Compatibility
+if width == 3840 and height == 2160:
+    btn_width_height = 370
+    compatible = True
+elif width == 1920 and height == 1080:
+    btn_width_height = 185
+    compatible = True
+elif width == 1366 and height == 768: 
+    btn_width_height = 131.6
+    compatible = True
+else:
+    compatible = False
+
+
 # Variables
 turn = "x"
 click_btn = []
@@ -46,15 +60,15 @@ def app():
         def win_execution():
             global draw_type, win_btn, x_score_number, o_score_number
             if draw_type == "horizontal":
-                type_character = "-"
+                type_character = "―"
             elif draw_type == "vertical":
                 type_character = "|"
             elif draw_type == "slant-left":
-                type_character = "\\"
+                type_character = "⟍"
             elif draw_type == "slant-right":
-                type_character = "/"
+                type_character = "\u2215"
             for i in win_btn:
-                i["font"] = ("Arial", 100)
+                i["font"] = ("Arial", 150)
                 i["text"] = type_character
             status["foreground"] = "green"
             status[
@@ -426,15 +440,15 @@ Game In Progress
     o_score_label.place(relx=0.76, rely=0.4)
     reset_score_btn.place(relx=0.745, rely=0.47)
     # -----------------Buttons--------------------
-    button_1.place(relx=0.355, rely=0.2, height=370, width=370)
-    button_2.place(relx=0.455, rely=0.2, height=370, width=370)
-    button_3.place(relx=0.555, rely=0.2, height=370, width=370)
-    button_4.place(relx=0.355, rely=0.38, height=370, width=370)
-    button_5.place(relx=0.455, rely=0.38, height=370, width=370)
-    button_6.place(relx=0.555, rely=0.38, height=370, width=370)
-    button_7.place(relx=0.355, rely=0.56, height=370, width=370)
-    button_8.place(relx=0.455, rely=0.56, height=370, width=370)
-    button_9.place(relx=0.555, rely=0.56, height=370, width=370)
+    button_1.place(relx=0.355, rely=0.2, height=btn_width_height, width=btn_width_height)
+    button_2.place(relx=0.455, rely=0.2, height=btn_width_height, width=btn_width_height)
+    button_3.place(relx=0.555, rely=0.2, height=btn_width_height, width=btn_width_height)
+    button_4.place(relx=0.355, rely=0.38, height=btn_width_height, width=btn_width_height)
+    button_5.place(relx=0.455, rely=0.38, height=btn_width_height, width=btn_width_height)
+    button_6.place(relx=0.555, rely=0.38, height=btn_width_height, width=btn_width_height)
+    button_7.place(relx=0.355, rely=0.56, height=btn_width_height, width=btn_width_height)
+    button_8.place(relx=0.455, rely=0.56, height=btn_width_height, width=btn_width_height)
+    button_9.place(relx=0.555, rely=0.56, height=btn_width_height, width=btn_width_height)
 
     # Other Codes
     buttons = [
@@ -477,7 +491,13 @@ Game In Progress
     )
     restart_btn.place(relx=0.5, rely=0.8, anchor=CENTER)
 
+def screen_res_error():
+    screen_error = Label(root, text="Your Screen Resolution Is Not Supported Please Switch To Either 3840 X 2160, 1920 X 1080 or 1366 X 768", font=("Arial",10))
+    screen_error.pack()
 
 # Final Part
-app()
+if compatible:
+    app()
+elif not compatible:
+    screen_res_error()
 root.mainloop()
