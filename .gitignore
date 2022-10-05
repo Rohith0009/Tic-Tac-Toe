@@ -1,0 +1,7 @@
+*.spec
+build/
+dist/
+__pycache__/
+.vscode
+*.ifp
+installer/
