@@ -1,5 +1,6 @@
 # Imports
 from tkinter import *
+from tkinter import messagebox
 import ctypes
 
 # Compatibility Settings
@@ -20,12 +21,19 @@ if width == 3840 and height == 2160:
 elif width == 1920 and height == 1080:
     btn_width_height = 185
     compatible = True
-elif width == 1366 and height == 768: 
+elif width == 1366 and height == 768:
     btn_width_height = 131.6
     compatible = True
 else:
+    if width > 1920:
+        btn_width_height = 3840/width
+        btn_width_height = btn_width_height*370
+    elif width < 1920:
+        btn_width_height = 1920/width
+        btn_width_height = btn_width_height*185
+    else:
+        btn_width_height = 185
     compatible = False
-
 
 # Variables
 turn = "x"
@@ -77,6 +85,9 @@ def app():
 Status:
 {winner} Won the Game!!
             """
+            turn_label[
+                "text"
+            ] = ""
 
             if winner == "X":
                 x_score_number += 1
@@ -294,6 +305,7 @@ Status:
 Status:
 The Game Got Tied!!
             """
+            turn_label["text"] = ""
         elif not required_clicks == click_btn:
             tie = False
 
@@ -320,12 +332,14 @@ Game In Progress
             if turn == "x":
                 button_id["text"] = "X"
                 turn = "o"
+                turn_label["text"] = "It's O Turn"
                 click_btn.append(button_id_str)
                 tie_check()
                 win_function("x")
             else:
                 button_id["text"] = "O"
                 turn = "x"
+                turn_label["text"] = "It's X Turn"
                 click_btn.append(button_id_str)
                 tie_check()
                 win_function("o")
@@ -338,6 +352,7 @@ Game In Progress
         o_score_number = 0
         x_score_label["text"] = "X Score: 0"
         o_score_label["text"] = "O Score: 0"
+        restart()
         higher_score_calc()
 
     # Defining Widgets
@@ -346,6 +361,9 @@ Game In Progress
     score_heading = Label(root, text="Score Board", font=("Arial", 30))
     x_score_label = Label(root, text="X Score: 0", font=("Arial", 20))
     o_score_label = Label(root, text="O Score: 0", font=("Arial", 20))
+    turn_label = Label(
+        root, text="It's X Turn", font=("Arial", 30), foreground="#da627d"
+    )
     status = Label(
         root, text=default_status_text, font=("Arial", 35), foreground="orange"
     )
@@ -434,21 +452,40 @@ Game In Progress
     # Displaying Widgets
     heading.place(relx=0.5, rely=0.04, anchor=CENTER)
     sub_heading.place(relx=0.5, rely=0.109, anchor=CENTER)
-    status.place(relx=0.05, rely=0.35)
+    status.place(relx=0.05, rely=0.25)
     score_heading.place(relx=0.8, rely=0.3, anchor=CENTER)
     x_score_label.place(relx=0.76, rely=0.35)
     o_score_label.place(relx=0.76, rely=0.4)
     reset_score_btn.place(relx=0.745, rely=0.47)
+    turn_label.place(relx=0.1, rely=0.55)
     # -----------------Buttons--------------------
-    button_1.place(relx=0.355, rely=0.2, height=btn_width_height, width=btn_width_height)
-    button_2.place(relx=0.455, rely=0.2, height=btn_width_height, width=btn_width_height)
-    button_3.place(relx=0.555, rely=0.2, height=btn_width_height, width=btn_width_height)
-    button_4.place(relx=0.355, rely=0.38, height=btn_width_height, width=btn_width_height)
-    button_5.place(relx=0.455, rely=0.38, height=btn_width_height, width=btn_width_height)
-    button_6.place(relx=0.555, rely=0.38, height=btn_width_height, width=btn_width_height)
-    button_7.place(relx=0.355, rely=0.56, height=btn_width_height, width=btn_width_height)
-    button_8.place(relx=0.455, rely=0.56, height=btn_width_height, width=btn_width_height)
-    button_9.place(relx=0.555, rely=0.56, height=btn_width_height, width=btn_width_height)
+    button_1.place(
+        relx=0.355, rely=0.2, height=btn_width_height, width=btn_width_height
+    )
+    button_2.place(
+        relx=0.455, rely=0.2, height=btn_width_height, width=btn_width_height
+    )
+    button_3.place(
+        relx=0.555, rely=0.2, height=btn_width_height, width=btn_width_height
+    )
+    button_4.place(
+        relx=0.355, rely=0.38, height=btn_width_height, width=btn_width_height
+    )
+    button_5.place(
+        relx=0.455, rely=0.38, height=btn_width_height, width=btn_width_height
+    )
+    button_6.place(
+        relx=0.555, rely=0.38, height=btn_width_height, width=btn_width_height
+    )
+    button_7.place(
+        relx=0.355, rely=0.56, height=btn_width_height, width=btn_width_height
+    )
+    button_8.place(
+        relx=0.455, rely=0.56, height=btn_width_height, width=btn_width_height
+    )
+    button_9.place(
+        relx=0.555, rely=0.56, height=btn_width_height, width=btn_width_height
+    )
 
     # Other Codes
     buttons = [
@@ -477,6 +514,7 @@ Game In Progress
         status["foreground"] = "orange"
         status["text"] = default_status_text
         sub_heading["text"] = "Click on any grid to start"
+        turn_label["text"] = "It's X Turn"
         for i in buttons:
             i["text"] = ""
             i["font"] = ("Arial", 50)
@@ -491,13 +529,12 @@ Game In Progress
     )
     restart_btn.place(relx=0.5, rely=0.8, anchor=CENTER)
 
+
 def screen_res_error():
-    screen_error = Label(root, text="Your Screen Resolution Is Not Supported Please Switch To Either 3840 X 2160, 1920 X 1080 or 1366 X 768", font=("Arial",10))
-    screen_error.pack()
+    messagebox.showerror("Screen Resolution not Supported", "Your Screen Resolution Is Not Supported Please Switch To Either 3840 X 2160, 1920 X 1080 or 1366 X 768. If you still wish to use the app press ok.")
 
 # Final Part
-if compatible:
-    app()
-elif not compatible:
+app()
+if not compatible:
     screen_res_error()
 root.mainloop()
